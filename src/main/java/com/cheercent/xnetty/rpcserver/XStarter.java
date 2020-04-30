@@ -1,4 +1,4 @@
-package com.cheercent.xnetty.httpserver;
+package com.cheercent.xnetty.rpcserver;
 
 import java.io.InputStream;
 import java.util.Properties;
@@ -6,16 +6,12 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cheercent.xnetty.httpserver.base.XServer;
+import com.cheercent.xnetty.rpcserver.server.XServer;
 
 
-/*
- * @copyright (c) xhigher 2015 
- * @author xhigher    2015-3-26 
- */
 public class XStarter {
 	
-	private static Logger logger = LoggerFactory.getLogger(XStarter.class);
+	private static final Logger logger = LoggerFactory.getLogger(XStarter.class);
 	
 	private static String configFile = "/application.properties";
 
@@ -40,7 +36,9 @@ public class XStarter {
 			server.start();
 			
 		}catch(Exception e){
-			logger.error("XStarter.Exception:", e);
+			logger.error("XLauncher.Exception:", e);
 		}
 	}
+
+
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>xnetty-http-server</name>
+	<name>xnetty-rpc-server</name>
 	<comment></comment>
 	<projects>
 	</projects>

@@ -1,4 +1,4 @@
-package com.cheercent.xnetty.httpserver.util;
+package com.cheercent.xnetty.rpcserver.util;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
