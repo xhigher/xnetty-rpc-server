@@ -1,9 +1,6 @@
 package com.cheercent.xnetty.rpcserver.server;
 
-import java.io.InputStream;
 import java.util.Properties;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +20,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.util.concurrent.DefaultEventExecutorGroup;
-import io.netty.util.concurrent.DefaultThreadFactory;
 
 /*
  * @copyright (c) xhigher 2015 
@@ -45,9 +40,6 @@ public final class XServer {
     
     private int soRcvbuf = 1024 * 128;
     private int soSndbuf = 1024 * 128;
-    
-    //test
-    private static final ScheduledExecutorService scheduledService = Executors.newScheduledThreadPool(1);
     
 	public XServer(Properties properties) {
 		defaultPort = Integer.parseInt(properties.getProperty("server.port").trim());
@@ -73,31 +65,16 @@ public final class XServer {
 					pipeline.addLast(new XServerHandler(requestListener));
 				}
 			});
+			bootstrap.option(ChannelOption.SO_BROADCAST, true);
 			bootstrap.option(ChannelOption.SO_BACKLOG, 128);
 			bootstrap.option(ChannelOption.SO_RCVBUF, soRcvbuf);
 			bootstrap.option(ChannelOption.SO_SNDBUF, soSndbuf);
 			bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
 
-	        final ChannelFuture future = bootstrap.bind(defaultHost, defaultPort).sync();
+	        ChannelFuture future = bootstrap.bind(defaultHost, defaultPort).sync();
 
-	        //test			        
-//	        scheduledService.scheduleAtFixedRate(new Runnable() {
-//
-//				public void run() {
-//					String requestid = "all-"+String.valueOf(System.currentTimeMillis());
-//					logger.info("scheduleAtFixedRate send message: requestid="+requestid);
-//					MessageResponse response = MessageFactory.newMessageResponse(requestid);
-//					JSONObject resultData = new JSONObject();
-//					resultData.put("title", UUIDUtil.randomString(30, false));
-//					response.setData(resultData.toString());
-//					future.channel().writeAndFlush(response);
-//				}
-//	        	
-//	        }, 30, 10, TimeUnit.SECONDS);
-	        
 	        future.channel().closeFuture().sync();
-	        
-	        
+
 		}catch (Exception e){
 			logger.error("XServer.start.Exception",e);
 		} finally {
