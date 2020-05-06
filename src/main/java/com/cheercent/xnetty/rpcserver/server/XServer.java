@@ -40,13 +40,13 @@ public final class XServer {
     private EventLoopGroup bossGroup = null;
     private EventLoopGroup workerGroup = null;
 	protected ServerBootstrap bootstrap = null;
-	private DefaultEventExecutorGroup executorGroup = null;
-	
+
 	private final XRequestListener requestListener;
     
     private int soRcvbuf = 1024 * 128;
     private int soSndbuf = 1024 * 128;
     
+    //test
     private static final ScheduledExecutorService scheduledService = Executors.newScheduledThreadPool(1);
     
 	public XServer(Properties properties) {
@@ -56,7 +56,6 @@ public final class XServer {
 	}
 
 	public void start() {
-		executorGroup = new DefaultEventExecutorGroup(8, new DefaultThreadFactory("bizEventExecutorGroup"));
 		bossGroup = new NioEventLoopGroup(1);
         workerGroup = new NioEventLoopGroup(10);
 		try {
@@ -81,6 +80,7 @@ public final class XServer {
 
 	        final ChannelFuture future = bootstrap.bind(defaultHost, defaultPort).sync();
 
+	        //test			        
 //	        scheduledService.scheduleAtFixedRate(new Runnable() {
 //
 //				public void run() {
@@ -106,9 +106,6 @@ public final class XServer {
 	}
 
 	public void stop() {
-		if(executorGroup != null){
-			executorGroup.shutdownGracefully();
-		}
 		if(bossGroup!=null){
 			bossGroup.shutdownGracefully();
 		}
