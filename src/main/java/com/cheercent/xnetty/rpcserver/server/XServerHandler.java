@@ -8,7 +8,6 @@ import com.cheercent.xnetty.rpcserver.message.MessageFactory;
 import com.cheercent.xnetty.rpcserver.message.MessageFactory.MessageRequest;
 import com.cheercent.xnetty.rpcserver.message.MessageFactory.MessageResponse;
 import com.cheercent.xnetty.rpcserver.server.XServer.XRequestListener;
-import com.cheercent.xnetty.rpcserver.util.CommonUtils;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -22,7 +21,6 @@ public class XServerHandler extends SimpleChannelInboundHandler<JSONObject> {
     public XServerHandler(XRequestListener listener) {
     	requestListener = listener; 
     }
-    
     
     @Override
     public void channelRead0(final ChannelHandlerContext ctx, final JSONObject data) throws Exception {
@@ -44,6 +42,19 @@ public class XServerHandler extends SimpleChannelInboundHandler<JSONObject> {
     		}
     	}
 		return null;
+    }
+    
+    @Override
+    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+        super.handlerAdded(ctx);
+        XClientManager.instance().onChannelConnect(ctx.channel());
+    }
+    
+    
+    @Override
+    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+        super.handlerRemoved(ctx);
+        XClientManager.instance().onChannelClose(ctx.channel());
     }
     
     @Override

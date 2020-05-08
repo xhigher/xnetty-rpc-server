@@ -45,6 +45,8 @@ public final class XServer {
 		defaultPort = Integer.parseInt(properties.getProperty("server.port").trim());
 		
 		requestListener = new SimpleRequestListener();
+		
+		XClientManager.instance();
 	}
 
 	public void start() {
